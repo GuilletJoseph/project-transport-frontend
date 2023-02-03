@@ -1,29 +1,19 @@
-<p>vehicule works!</p>
-
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-   <a class="navbar-brand" style="color:white;">Vehicule Manager</a>
-   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
-   <span class="navbar-toggler-icon"></span>
-   </button>
-   <div class="collapse navbar-collapse" id="navbarColor02">
-      <ul class="navbar-nav mr-auto">
-         <li class="nav-item active">
-            <a class="nav-link" (click)="onOpenModal(null, 'add')">Add Vehicule <span class="sr-only">(current)</span></a>
-         </li>
-      </ul> 
-      <form class="form-inline my-2 my-lg-0">
-         <input type="search" (ngModelChange)="searchVehicules(key.value)" #key="ngModel" ngModel
-          name="key" id="searchName" class="form-control mr-sm-2" placeholder="Search vehicules..." required>
-      </form>
-   </div>
- </nav>
 <div class="container" id="main-container">
+
+
+   
+   <a class="nav-link" (click)="onOpenAddModal()">Add Vehicule <span class="sr-only">(current)</span></a>
+   <form class="form-inline my-2 my-lg-0">
+      <input type="search" (ngModelChange)="searchVehicules(key.value)" #key="ngModel" ngModel
+       name="key" id="searchName" class="form-control mr-sm-2" placeholder="Search vehicules..." required>
+   </form>
+
     <div class="row">
       <div *ngFor="let vehicule of vehicules" class="col-md-6 col-xl-3">
          <div class="card m-b-30">
             <div class="card-body row">
                <div class="col-6">
-                  <a href=""><img src="{{vehicule?.imageUrl}}" alt="" class="img-fluid rounded-circle w-60"></a>
+                  <a href=""><img src="vehicule?.imageUrl" alt="" class="img-fluid rounded-circle w-60"></a>
                </div>
                <div class="col-6 card-title align-self-center mb-0">
                   <h5>{{vehicule?.name}}</h5>
@@ -34,7 +24,7 @@
                <li class="list-group-item"><i class="fa fa-envelope float-right"></i>Nombre place : {{vehicule?.nbPlace}}</li>
                <li class="list-group-item"><i class="fa fa-boite float-right"></i>Type boite : {{vehicule?.idBoite?.nom}}</li>
                <li class="list-group-item"><i class="fa fa-boite float-right"></i>Immatriculation : {{vehicule?.immatriculation}}</li>
-               <li class="list-group-item"><i class="fa fa-boite float-right"></i>Utilisateur : {{vehicule?.idUtilisateur?.nom}}</li>
+               <li class="list-group-item"><i class="fa fa-boite float-right"></i>Utilisateur : {{vehicule?.idUtilisateur?.identifiant}}</li>
             </ul>
             <div class="card-body">
              <div class="float-right btn-group btn-group-sm">
@@ -62,18 +52,26 @@
                   <label for="name">Nom</label>
                   <input type="text" ngModel name="name" class="form-control" id="name" placeholder="Name" required>
                </div>
+
                <div class="form-group">
-                  <label for="idTypeV">type Vehicule</label>
-                  <input type="idTypeV" ngModel name="idTypeV" class="form-control" id="idTypeV" placeholder="type vehicule" required>
-               </div>
+                  <select [ngModel]="editVehicule?.idTypeV" name="idTypeV" class="form-control" id="idTypeV" required>
+                    <option *ngFor="let typeV of typeVs" [ngValue]="typeV">
+                       {{typeV?.nom}}
+                    </option>
+                  </select>
+                 </div>
                <div class="form-group">
                   <label for="nbPlace">nombre place</label>
                   <input type="text" ngModel name="nbPlace" class="form-control" id="nbPlace" placeholder="Nombre Place" required>
                </div>
-               <!-- <div class="form-group">
-                  <label for="idBoite">Type boite</label>
-                  <input type="text" ngModel name="idBoite" class="form-control" id="idBoite" placeholder="idBoite" required>
-               </div> -->
+
+               <div class="form-group">
+                  <select [ngModel]="editVehicule?.idBoite" name="idBoite" class="form-control" id="idBoite" required>
+                    <option *ngFor="let boite of boites" [ngValue]="boite">
+                       {{boite?.nom}}
+                    </option>
+                  </select>
+                 </div>
                <div class="form-group">
                   <label for="imageUrl">Image URL</label>
                   <input type="text" ngModel name="imageUrl" class="form-control" id="imageUrl" placeholder="Image URL" required>
@@ -82,12 +80,13 @@
                   <label for="immatriculation">Immatriculation</label>
                   <input type="text" ngModel name="immatriculation" class="form-control" id="immatriculation" placeholder="Immatriculation" required>
                </div>
-               <!-- <div class="form-group">
-                  <label for="idUtilisateur">Utilisateur</label>
-                  <input type="text" ngModel name="idUtilisateur" class="form-control" id="idUtilisateur" placeholder="Utilisateur" required>
-               </div> -->
-
-
+               <div class="form-group">
+                  <select [ngModel]="editVehicule?.idUtilisateur" name="idUtilisateur" class="form-control" id="idUtilisateur" required>
+                    <option *ngFor="let utilisateur of utilisateurs" [ngValue]="utilisateur">
+                       {{utilisateur?.nom}}
+                    </option>
+                  </select>
+                 </div>
                <div class="modal-footer">
                   <button type="button" id="add-vehicule-form" class="btn btn-secondary" data-dismiss="modal">Close</button>
                   <button [disabled]="addForm.invalid" type="submit" class="btn btn-primary" >Save changes</button>
@@ -103,7 +102,7 @@
        <div class="modal-dialog" role="document">
           <div class="modal-content">
              <div class="modal-header">
-                <h5 class="modal-title" id="updateVehiculeModalLabel">Edit Vehicule {{editVehicule?.name}}</h5>
+                <h5 class="modal-title" id="updateVehiculeModalLabel">Edit Vehicule editVehicule.name</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
                 </button>
@@ -115,47 +114,44 @@
                       <input type="text" ngModel="{{editVehicule?.name}}" name="name" class="form-control" id="name" aria-describedby="typeHelp" placeholder="Name">
                    </div>
                    <input type="hidden" ngModel="{{editVehicule?.id}}" name="id" class="form-control" id="id" placeholder="id">
-                   <!-- <div class="form-group">
-                      <label for="idTypeV">type vehicule</label>
-                      <input type="text" [ngModel]="editVehicule!.idTypeV" name="idTypeV" class="form-control" id="idTypeV" placeholder="idTypeV">
-                   </div> -->
+               
                    <div class="form-group">
-                   <select ngModel="{{editVehicule?.idTypeV}}" name="idTypeV" class="form-control" id="idTypeV" placeholder="type Vehicule">
+                   <select [ngModel]="editVehicule?.idTypeV" name="idTypeV" class="form-control" id="idTypeV" placeholder="type Vehicule">
                      <option *ngFor="let typeV of typeVs" [ngValue]="typeV">
                         {{typeV?.nom}}
                      </option>
                    </select>
                   </div>
 
-
-
-
-
-
-
-
                    <div class="form-group">
                       <label for="nbPlace">Nombre place</label>
-                      <input type="text" ngModel="{{editVehicule?.nbPlace}}" name="nbPlace" class="form-control" id="nbPlace" placeholder="Job title">
+                      <input type="text" ngModel="{{editVehicule?.nbPlace}}" name="nbPlace" class="form-control" id="nbPlace" placeholder="Nombre place">
                    </div>
+                   <div class="form-group">
+                     <select [ngModel]="editVehicule?.idBoite" name="idBoite" class="form-control" id="idBoite">
+                        <option *ngFor="let boite of boites" [ngValue]="boite">
+                          {{boite?.nom}}
+                       </option>
+                     </select>
+                    </div>
 
-                   <!-- <div class="form-group">
-                      <label for="idBoite">Type boite</label>
-                      <input type="text" ngModel="{{editVehicule?.idBoite?.nom}}" name="idBoite" class="form-control" id="idBoite" name="idBoite" placeholder="idBoite">
-                   </div> -->
+
                    <div class="form-group">
                       <label for="imageUrl">Image URL</label>
-                      <input type="text" ngModel="{{editVehicule?.imageUrl}}" name="imageUrl" class="form-control" id="imageUrl" placeholder="Image URL">
+                      <input type="text" ngModel="{{editVehicule?.imageUrl}}" name="imageUrl" class="form-control" id="imageUrl" placeholder="Image URL" required>
                    </div>
 
                    <div class="form-group">
                      <label for="immatriculation">Immatriculation</label>
                      <input type="text" ngModel="{{editVehicule?.immatriculation}}" name="immatriculation" class="form-control" id="immatriculation" placeholder="immatriculation">
                   </div>
-                  <!-- <div class="form-group">
-                     <label for="idUtilisateur">Utilisateur</label>
-                     <input type="text" ngModel="{{editVehicule?.idUtilisateur?.nom}}" name="idUtilisateur" class="form-control" id="idUtilisateur" placeholder="idUtilisateur">
-                  </div> -->
+                  <div class="form-group">
+                     <select [ngModel]="editVehicule?.idUtilisateur" name="idUtilisateur" class="form-control" id="idUtilisateur" required>
+                       <option *ngFor="let utilisateur of utilisateurs" [ngValue]="utilisateur">
+                          {{utilisateur?.nom}}
+                       </option>
+                     </select>
+                    </div>
                    <div class="modal-footer">
                       <button type="button" id="" data-dismiss="modal" class="btn btn-secondary">Close</button>
                       <button (click)="onUpdateVehicule(editForm.value)" data-dismiss="modal" class="btn btn-primary" >Save changes</button>
@@ -177,7 +173,7 @@
                 </button>
              </div>
              <div class="modal-body">
-                <p>Are you sure you want to delete vehicule {{deleteVehicule?.name}}?</p>
+                <p>Are you sure you want to delete vehicule {{deleteVehicule?.name}}</p>
                 <div class="modal-footer">
                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Non</button>
                    <button (click)="onDeleteVehicule(deleteVehicule!.id)" class="btn btn-danger" data-dismiss="modal">Oui</button>

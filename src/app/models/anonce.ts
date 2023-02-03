@@ -1,11 +1,14 @@
+import { Utilisateur } from "./utilisateur";
+import { Vehicule } from "./vehicule";
+import { Ville } from "./ville";
+
 export interface Anonce {
     id: number;
-    idUtilisateur: Object;
-    idVehicule: Object;
+    idUtilisateur: Utilisateur;
+    idVehicule: Vehicule;
     date: string;
-    idBoite: Object;
     hDebut: string;
     nbPlace: number;
-    idVilleDepart:Object;
-    idVilleArrive:Object;
+    idVilleDepart:Ville;
+    idVilleArrive:Ville;
 }

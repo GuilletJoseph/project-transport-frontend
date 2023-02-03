@@ -1,1 +1,111 @@
-<p>boite works!</p>
+<div class="container" id="main-container">
+   <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+         <a class="nav-link" (click)="onOpenModal(null, 'add')">Add Boite <span class="sr-only">(current)</span></a>
+      </li>
+   </ul> 
+   <form class="form-inline my-2 my-lg-0">
+      <input type="search" (ngModelChange)="searchBoites(key.value)" #key="ngModel" ngModel
+       name="key" id="searchName" class="form-control mr-sm-2" placeholder="Search boites..." required>
+   </form>
+    <div class="row">
+      <div *ngFor="let boite of boites" class="col-md-6 col-xl-3">
+         <div class="card m-b-30">
+            <div class="card-body row">
+               <div class="col-6 card-title align-self-center mb-0">
+                  <h5>{{boite?.nom}}</h5>
+               </div>
+            </div>
+            <div class="card-body">
+             <div class="float-right btn-group btn-group-sm">
+                <a (click)="onOpenModal(boite, 'edit')" class="btn btn-primary tooltips" data-placement="top" data-original-title="Edit"><i class="fa fa-pencil"></i> </a>
+                <a (click)="onOpenModal(boite, 'delete')" class="btn btn-secondary tooltips" data-placement="top" data-original-title="Delete"><i class="fa fa-times"></i></a>
+             </div>
+            </div>
+         </div>
+      </div>
+    </div>
+    
+    <!-- Add Boite Modal -->
+    <div class="modal fade" id="addBoiteModal" tabindex="-1" role="dialog" aria-labelledby="addVehiculeModalLabel" aria-hidden="true">
+       <div class="modal-dialog" role="document">
+         <div class="modal-content">
+            <div class="modal-header">
+               <h5 class="modal-title" id="addBoiteModalLabel">Ajouter boite</h5>
+               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+               <span aria-hidden="true">&times;</span>
+               </button>
+            </div>
+            <div class="modal-body">
+               <form #addForm="ngForm" (ngSubmit)="onAddBoite(addForm)">
+               <div class="form-group">
+                  <label for="nom">Nom</label>
+                  <input type="text" ngModel name="nom" class="form-control" id="nom" placeholder="Nom" required>
+               </div>   
+             
+               <div class="modal-footer">
+                  <button type="button" id="add-boite-form" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  <button [disabled]="addForm.invalid" type="submit" class="btn btn-primary" >Save changes</button>
+               </div>
+               </form>
+            </div>
+         </div>
+       </div>
+       </div>
+     
+     <!-- Edit Modal -->
+     <div class="modal fade" id="updateBoiteModal" tabindex="-1" role="dialog" aria-labelledby="boiteEditModalLabel" aria-hidden="true">
+       <div class="modal-dialog" role="document">
+          <div class="modal-content">
+             <div class="modal-header">
+                <h5 class="modal-title" id="updateBoiteModalLabel">edit Boite</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+             </div>
+             <div class="modal-body">
+                <form #editForm="ngForm">
+                   <div class="form-group">
+                      <label for="name">Name</label>
+                      <input type="text" ngModel="{{editBoite?.nom}}" name="nom" class="form-control" id="nom" aria-describedby="typeHelp" placeholder="Nom">
+                   </div>
+                   <input type="hidden" ngModel="{{editBoite?.id}}" name="id" class="form-control" id="id" placeholder="id">
+                   <div class="modal-footer">
+                      <button type="button" id="" data-dismiss="modal" class="btn btn-secondary">Close</button>
+                      <button (click)="onUpdateBoite(editForm.value)" data-dismiss="modal" class="btn btn-primary" >Save changes</button>
+                   </div>
+                </form>
+             </div>
+          </div>
+       </div>
+     </div>
+     
+     <!-- Delete Modal -->
+     <div class="modal fade" id="deleteBoiteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModelLabel" aria-hidden="true">
+       <div class="modal-dialog" role="document">
+          <div class="modal-content">
+             <div class="modal-header">
+                <h5 class="modal-title" id="deleteModelLabel">Delete Vehicule</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+             </div>
+             <div class="modal-body">
+                <p>Est ce que vous voulez supprimer le boite {{deleteBoite?.nom}}</p>
+                <div class="modal-footer">
+                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Non</button>
+                   <button (click)="onDeleteBoite(deleteBoite!.id)" class="btn btn-danger" data-dismiss="modal">Oui</button>
+                </div>
+             </div>
+          </div>
+       </div>
+     </div> 
+     </div>
+     
+     <!-- Notification for no boites -->
+     <div *ngIf="boites?.length == 0" class="col-lg-12 col-md-12 col-xl-12">
+     <div class="alert alert-info" role="alert">
+       <h4 class="alert-heading">NO Boites!</h4>
+       <p>Boite ete pas trouve.</p>
+ </div>
+</div>

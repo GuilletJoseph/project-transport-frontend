@@ -5,34 +5,52 @@ import { Profil } from '../../models/profil';
 import { ProfilService } from '../../services/profil.service';
 import { Ville } from '../../models/ville';
 import { VilleService } from '../../services/ville.service';
+import { Vehicule } from '../../models/vehicule';
+import { VehiculeService } from '../../services/vehicule.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { NgForm } from '@angular/forms';
-
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-utilisateur',
-  templateUrl: './utilisateur.component.html',
-  styleUrls: ['./utilisateur.component.css']
+  templateUrl: './utilisateurone.component.html',
+  styleUrls: ['./utilisateurone.component.css']
 })
-export class UtilisateurComponent implements OnInit {
-  public utilisateurs!: Utilisateur[];
+export class UtilisateuroneComponent implements OnInit {
+  public utilisateur!: Utilisateur | null| undefined;
   public editUtilisateur!: Utilisateur | null| undefined;
   public deleteUtilisateur!: Utilisateur| null| undefined;
   public profils!: Profil[];
   public profil!:Profil| null| undefined;
   public villes!: Ville[];
   public ville: Ville | null| undefined;
-  constructor(private utilisateurService: UtilisateurService, private profilService: ProfilService,
-    private villeService: VilleService ){
+  public vehicules!: Vehicule[];
+  public vehicule: Vehicule | null| undefined;
+  constructor(private route :ActivatedRoute, private utilisateurService: UtilisateurService, private profilService: ProfilService,
+    private villeService: VilleService, private vehiculeService: VehiculeService,){
   }
   
   ngOnInit() {
-    this.getUtilisateurs();
+    this.getUtilisateurOne();
     this.getProfils();
     this.getVilles();
-    
+    this.getVehicules();
+   
   }
-
+  
+  public getUtilisateurOne(): void {
+    const param=this.route.snapshot.paramMap.get('id');
+  const id = param?+param:0;
+    this.utilisateurService.getUtilisateurOne(id).subscribe(
+      (response: Utilisateur) => {
+        this.utilisateur = response;
+        console.log(this.utilisateur);
+      },
+      (error: HttpErrorResponse) => {
+        alert(error.message);
+      }
+    );
+  }
   public getProfils(): void {
     this.profilService.getProfils().subscribe(
       (response: Profil[]) => {
@@ -45,7 +63,17 @@ export class UtilisateurComponent implements OnInit {
     );
   }
 
-
+  public getVehicules(): void {
+    this.vehiculeService.getVehicules().subscribe(
+      (response: Vehicule[]) => {
+        this.vehicules = response;
+        console.log(this.vehicules);
+      },
+      (error: HttpErrorResponse) => {
+        alert(error.message);
+      }
+    );
+  }
   public getVilles(): void {
     this.villeService.getVilles().subscribe(
       (response: Ville[]) => {
@@ -58,34 +86,6 @@ export class UtilisateurComponent implements OnInit {
     );
   }
 
-  public getUtilisateurs(): void {
-    this.utilisateurService.getUtilisateurs().subscribe(
-      (response: Utilisateur[]) => {
-        this.utilisateurs = response;
-        console.log(this.utilisateurs);
-      },
-      (error: HttpErrorResponse) => {
-        alert(error.message);
-      }
-    );
-  }
-  public onAddUtilisateur(addForm: NgForm): void {
-    document.getElementById('add-utilisateur-form')!.click();
-    console.log(addForm.value);
-
-    this.utilisateurService.addUtilisateur(addForm.value).subscribe(
-      (response: Utilisateur) => {
-        console.log(response);
-        this.getUtilisateurs();
-        addForm.reset();
-      },
-      (error: HttpErrorResponse) => {
-        alert(error.message);
-        addForm.reset();
-      }
-    );
-  }
-
   public onUpdateUtilisateur(utilisateur: Utilisateur): void {
     console.log(utilisateur);
 
@@ -93,7 +93,7 @@ export class UtilisateurComponent implements OnInit {
       (response: Utilisateur) => {
 
        console.log(response);
-        this.getUtilisateurs();
+       // this.getUtilisateurs();
       },
       (error: HttpErrorResponse) => {
         alert(error.message);
@@ -105,7 +105,7 @@ export class UtilisateurComponent implements OnInit {
     this.utilisateurService.deleteUtilisateur(utilisateurId).subscribe(
       (response: void) => {
         console.log(response);
-        this.getUtilisateurs();
+       // this.getUtilisateurs();
       },
       (error: HttpErrorResponse) => {
         alert(error.message);
@@ -113,37 +113,9 @@ export class UtilisateurComponent implements OnInit {
     );
   }
 
-  public searchUtilisateurs(key: string): void {
-    console.log(key);
-    const results: Utilisateur[] = [];
-    for (const utilisateur of this.utilisateurs) {
-      if (utilisateur.nom.toLowerCase().indexOf(key.toLowerCase()) !== -1
-      //|| utilisateur.idTypeV.toLowerCase().indexOf(key.toLowerCase()) !== -1
-      //|| utilisateur.idBoite.toLowerCase().indexOf(key.toLowerCase()) !== -1
-     // || utilisateur.nbPlace.toLowerCase().indexOf(key.toLowerCase()) !== -1
-     ) {
-      results.push(utilisateur);
-      }
-    }
-    this.utilisateurs = results;
-    if (results.length === 0 || !key) {
-      this.getUtilisateurs();
-    }
-  }
 
 
 
-  public onOpenAddModal(): void {
-    const container = document.getElementById('main-container');
-    const button = document.createElement('button');
-    button.type = 'button';
-    button.style.display = 'none';
-    button.setAttribute('data-toggle', 'modal');
-      button.setAttribute('data-target', '#addUtilisateurModal');
-    container!.appendChild(button);
-    button.click();
-  
-}
   public onOpenModal(utilisateur: Utilisateur, mode: string): void {
     const container = document.getElementById('main-container');
     const button = document.createElement('button');

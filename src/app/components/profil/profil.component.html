@@ -1,1 +1,112 @@
-<p>profil works!</p>
+<div class="container" id="main-container">
+   
+      <ul class="navbar-nav mr-auto">
+         <li class="nav-item active">
+            <a class="nav-link" (click)="onOpenModal(null, 'add')">Add Profil <span class="sr-only">(current)</span></a>
+         </li>
+      </ul> 
+      <form class="form-inline my-2 my-lg-0">
+         <input type="search" (ngModelChange)="searchProfils(key.value)" #key="ngModel" ngModel
+          name="key" id="searchName" class="form-control mr-sm-2" placeholder="Search profils..." required>
+      </form>
+    <div class="row">
+      <div *ngFor="let profil of profils" class="col-md-6 col-xl-3">
+         <div class="card m-b-30">
+            <div class="card-body row">
+               <div class="col-6 card-title align-self-center mb-0">
+                  <h5>{{profil?.nom}}</h5>
+               </div>
+            </div>
+            <div class="card-body">
+             <div class="float-right btn-group btn-group-sm">
+                <a (click)="onOpenModal(profil, 'edit')" class="btn btn-primary tooltips" data-placement="top" data-original-title="Edit"><i class="fa fa-pencil"></i> </a>
+                <a (click)="onOpenModal(profil, 'delete')" class="btn btn-secondary tooltips" data-placement="top" data-original-title="Delete"><i class="fa fa-times"></i></a>
+             </div>
+            </div>
+         </div>
+      </div>
+    </div>
+    
+    <!-- Add Profil Modal -->
+    <div class="modal fade" id="addProfilModal" tabindex="-1" role="dialog" aria-labelledby="addVehiculeModalLabel" aria-hidden="true">
+       <div class="modal-dialog" role="document">
+         <div class="modal-content">
+            <div class="modal-header">
+               <h5 class="modal-title" id="addProfilModalLabel">Ajouter profil</h5>
+               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+               <span aria-hidden="true">&times;</span>
+               </button>
+            </div>
+            <div class="modal-body">
+               <form #addForm="ngForm" (ngSubmit)="onAddProfil(addForm)">
+               <div class="form-group">
+                  <label for="name">Nom</label>
+                  <input type="text" ngModel name="nom" class="form-control" id="name" placeholder="Nom" required>
+               </div>   
+             
+               <div class="modal-footer">
+                  <button type="button" id="add-profil-form" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  <button [disabled]="addForm.invalid" type="submit" class="btn btn-primary" >Save changes</button>
+               </div>
+               </form>
+            </div>
+         </div>
+       </div>
+       </div>
+     
+     <!-- Edit Modal -->
+     <div class="modal fade" id="updateProfilModal" tabindex="-1" role="dialog" aria-labelledby="profilEditModalLabel" aria-hidden="true">
+       <div class="modal-dialog" role="document">
+          <div class="modal-content">
+             <div class="modal-header">
+                <h5 class="modal-title" id="updateProfilModalLabel">edit Profil</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+             </div>
+             <div class="modal-body">
+                <form #editForm="ngForm">
+                   <div class="form-group">
+                      <label for="name">Name</label>
+                      <input type="text" ngModel="{{editProfil?.nom}}" name="nom" class="form-control" id="nom" aria-describedby="typeHelp" placeholder="Nom">
+                   </div>
+                   <input type="hidden" ngModel="{{editProfil?.id}}" name="id" class="form-control" id="id" placeholder="id">
+                   <div class="modal-footer">
+                      <button type="button" id="" data-dismiss="modal" class="btn btn-secondary">Close</button>
+                      <button (click)="onUpdateProfil(editForm.value)" data-dismiss="modal" class="btn btn-primary" >Save changes</button>
+                   </div>
+                </form>
+             </div>
+          </div>
+       </div>
+     </div>
+     
+     <!-- Delete Modal -->
+     <div class="modal fade" id="deleteProfilModal" tabindex="-1" role="dialog" aria-labelledby="deleteModelLabel" aria-hidden="true">
+       <div class="modal-dialog" role="document">
+          <div class="modal-content">
+             <div class="modal-header">
+                <h5 class="modal-title" id="deleteModelLabel">Delete Vehicule</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+             </div>
+             <div class="modal-body">
+                <p>Est ce que vous voulez supprimer le profil {{deleteProfil?.nom}}</p>
+                <div class="modal-footer">
+                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Non</button>
+                   <button (click)="onDeleteProfil(deleteProfil!.id)" class="btn btn-danger" data-dismiss="modal">Oui</button>
+                </div>
+             </div>
+          </div>
+       </div>
+     </div> 
+     </div>
+     
+     <!-- Notification for no profils -->
+     <div *ngIf="profils?.length == 0" class="col-lg-12 col-md-12 col-xl-12">
+     <div class="alert alert-info" role="alert">
+       <h4 class="alert-heading">NO Profils!</h4>
+       <p>Profil ete pas trouve.</p>
+ </div>
+</div>

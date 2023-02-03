@@ -33,9 +33,9 @@ export class TypeVComponent implements OnInit {
       }
     );
   }
-  
+   
   public onAddTypeV(addForm: NgForm): void {
-    document.getElementById('add-typev-form')!.click();
+    document.getElementById('add-typeV-form')!.click();
     this.typevService.addTypeV(addForm.value).subscribe(
       (response: TypeV) => {
         console.log(response);

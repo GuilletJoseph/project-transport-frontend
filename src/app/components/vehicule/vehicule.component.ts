@@ -3,9 +3,14 @@ import { Vehicule } from '../../models/vehicule';
 import { VehiculeService } from '../../services/vehicule.service';
 import { TypeV } from '../../models/typev';
 import { TypevService } from '../../services/typev.service';
+import { Boite } from '../../models/boite';
+import { BoiteService } from '../../services/boite.service';
+import { Utilisateur } from '../../models/utilisateur';
+import { UtilisateurService } from '../../services/utilisateur.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { NgForm } from '@angular/forms';
-import { TypeVComponent } from '../typev/typev.component';
+
+
 @Component({
   selector: 'app-vehicule',
   templateUrl: './vehicule.component.html',
@@ -13,18 +18,63 @@ import { TypeVComponent } from '../typev/typev.component';
 })
 export class VehiculeComponent implements OnInit {
   public vehicules!: Vehicule[];
-  public editVehicule!: Vehicule | null | undefined;
-  public deleteVehicule!: Vehicule | null | undefined;
-  public typeV!: TypeV | null | undefined;
+  public editVehicule!: Vehicule | null| undefined;
+  public deleteVehicule!: Vehicule| null| undefined;
+  public typeV!: TypeV| null| undefined; 
   public typeVs!: TypeV[];
-  constructor(private vehiculeService: VehiculeService, private typevComponent: TypeVComponent){
+  public utilisateur!: Utilisateur | null| undefined;
+  public utilisateurs!: Utilisateur[];
+  public boite!: Boite | null | undefined;
+  public boites!: Boite[];
+  constructor(private vehiculeService: VehiculeService, private typevService: TypevService,
+    private boiteService: BoiteService, private utilisateurService: UtilisateurService,){
   }
-  
+   
   ngOnInit() {
     this.getVehicules();
-    this.typevComponent.getTypeVs();
+    this.getTypeVs();
+    this.getBoites();
+    this.getUtilisateurs();
   }
   
+  public getBoites(): void {
+    this.boiteService.getBoites().subscribe(
+      (response: Boite[]) => {
+        this.boites = response;
+        console.log(this.boites);
+      },
+      (error: HttpErrorResponse) => {
+        alert(error.message);
+      }
+    );
+  }
+
+  public getTypeVs(): void {
+    this.typevService.getTypeVs().subscribe(
+      (response: TypeV[]) => {
+        this.typeVs = response;
+        console.log(this.typeVs);
+      },
+      (error: HttpErrorResponse) => {
+        alert(error.message);
+      }
+    );
+  }
+
+  public getUtilisateurs(): void {
+    this.utilisateurService.getUtilisateurs().subscribe(
+      (response: Utilisateur[]) => {
+        this.utilisateurs = response;
+        console.log(this.utilisateurs);
+      },
+      (error: HttpErrorResponse) => {
+        alert(error.message);
+      }
+    );
+  }
+
+
+
 
   public getVehicules(): void {
     this.vehiculeService.getVehicules().subscribe(
@@ -39,8 +89,11 @@ export class VehiculeComponent implements OnInit {
   }
   public onAddVehicule(addForm: NgForm): void {
     document.getElementById('add-vehicule-form')!.click();
+    console.log(addForm.value);
+
     this.vehiculeService.addVehicule(addForm.value).subscribe(
       (response: Vehicule) => {
+        
         console.log(response);
         this.getVehicules();
         addForm.reset();
@@ -97,7 +150,24 @@ export class VehiculeComponent implements OnInit {
     }
   }
 
-  public onOpenModal(vehicule: Vehicule | null | undefined, mode: string): void {
+
+
+  public onOpenAddModal(): void {
+    const container = document.getElementById('main-container');
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.style.display = 'none';
+    button.setAttribute('data-toggle', 'modal');
+      button.setAttribute('data-target', '#addVehiculeModal');
+    container!.appendChild(button);
+    button.click();
+  
+}
+
+
+
+
+  public onOpenModal(vehicule: Vehicule, mode: string): void {
     const container = document.getElementById('main-container');
     const button = document.createElement('button');
     button.type = 'button';

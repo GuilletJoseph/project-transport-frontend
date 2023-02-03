@@ -10,6 +10,6 @@ export interface Vehicule {
   idBoite: Boite;
   imageUrl: string;
   immatriculation:string;
-  idUtilisateur:Utilisateur;
+  idUtilisateur:Utilisateur; 
   
 }

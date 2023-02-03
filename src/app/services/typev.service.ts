@@ -20,7 +20,7 @@ export class TypevService {
   public addTypeV(typeV: TypeV): Observable<TypeV> {
     return this.http.post<TypeV>(`${this.apiServerUrl}/typev/add`, typeV);
   }
-
+ 
   public updateTypeV(typeV: TypeV): Observable<TypeV> {
     return this.http.put<TypeV>(`${this.apiServerUrl}/typev/update`, typeV);
   }

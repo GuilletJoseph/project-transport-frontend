@@ -1,15 +1,17 @@
+import { Vehicule } from "./vehicule"
+import { Ville } from "./ville";
+import { Profil } from "./profil";
 export interface Utilisateur {
     id: number;
     identifiant: string;
     mdp:String;
-    idProfil:Object;
+    idProfil:Profil;
     nom:String;
     prenom:String;
     mail:String;
     tel:String;
-    idVille:Object;
+    idVille:Ville;
     adresse:String;
     imageUrl:String;
-    vehicules:Object[];
-   
+    vehicules:Vehicule[];
 }

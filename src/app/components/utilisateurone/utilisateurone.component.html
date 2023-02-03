@@ -1,0 +1,53 @@
+<div class="container" id="main-container">
+
+     <div class="row">
+      <div class="col-md-6 col-xl-3">
+          <div class="card m-b-30">
+             <div class="card-body row">
+                <div class="col-6">
+                   <a href=""><img src="utilisateur?.imageUrl" alt="" class="img-fluid rounded-circle w-60"></a>
+                </div>
+                <div class="col-6 card-title align-self-center mb-0">
+                   <h5>{{utilisateur?.identifiant}}</h5>
+                   <p class="m-0">{{utilisateur?.nom}}</p>
+                   <p class="m-0">{{utilisateur?.prenom}}</p>
+                </div>
+             </div> 
+             <ul class="list-group list-group-flush">
+                <li class="list-group-item"><i class="fa fa-boite float-right"></i>Mail : {{utilisateur?.mail}}</li>
+                <li class="list-group-item"><i class="fa fa-boite float-right"></i>Profile : {{utilisateur?.idProfil?.nom}}</li>
+                <li class="list-group-item"><i class="fa fa-boite float-right"></i>Ville : {{utilisateur?.idVille?.nom}}</li>
+                <li class="list-group-item"><i class="fa fa-boite float-right"></i>Adresse : {{utilisateur?.adresse}}</li>
+                <li class="list-group-item"><i class="fa fa-boite float-right"></i>Tel : {{utilisateur?.tel}}</li>
+             </ul>
+          </div>
+       </div>
+     </div>
+
+      <div *ngFor="let vehicule of utilisateur?.vehicules" class="col-md-6 col-xl-3">
+         <div class="card m-b-30">
+            <div class="card-body row">
+               <div class="col-6">
+                  <a href=""><img src="vehicule?.imageUrl" alt="" class="img-fluid rounded-circle w-60"></a>
+               </div>
+               <div class="col-6 card-title align-self-center mb-0">
+                  <h5>{{vehicule?.name}}</h5>
+                  <p class="m-0">{{vehicule?.idTypeV?.nom}}</p>
+               </div>
+            </div>
+            <ul class="list-group list-group-flush">
+               <li class="list-group-item"><i class="fa fa-envelope float-right"></i>Nombre place : {{vehicule?.nbPlace}}</li>
+               <li class="list-group-item"><i class="fa fa-boite float-right"></i>Type boite : {{vehicule?.idBoite?.nom}}</li>
+               <li class="list-group-item"><i class="fa fa-boite float-right"></i>Immatriculation : {{vehicule?.immatriculation}}</li>
+               <li class="list-group-item"><i class="fa fa-boite float-right"></i>Utilisateur : {{vehicule?.idUtilisateur?.identifiant}}</li>
+            </ul>
+         </div>
+      </div>
+  
+     
+  
+
+
+
+      </div>
+ 
